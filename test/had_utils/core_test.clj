@@ -2,6 +2,21 @@
   (:require [clojure.test :refer :all]
             [had-utils.core :refer :all]))
 
+(deftest test-slurp-split
+  (testing "Read test file with \\n\\n"
+    (is (= ["There\nare" "some\nwords" "here\n"]
+           (slurp-split "test/had_utils/sample.txt" #"\n\n")))))
+
+(deftest test-slurp-lines-map
+  (testing "Count letters in lines"
+    (is (= [5 3 0 4 5 0 4]
+           (slurp-lines-map "test/had_utils/sample.txt" count)))))
+
+(deftest test-slurp-lines
+  (testing "Read test file"
+    (is (= ["There" "are" "" "some" "words" "" "here"]
+           (slurp-lines "test/had_utils/sample.txt")))))
+
 (deftest test-map-map
   (let [coll {1 2 3 4 5 6}]
     (testing "Test val-fn only"
