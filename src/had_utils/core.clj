@@ -30,8 +30,11 @@
   a function of two arguments, the key and value.
   Note that to make the usage more natural the optional key-fn
   argument goes in the second place when used."
-  ([map val-fn]
-   (map-map map val-fn (fn [k v] k)))
-  ([map key-fn val-fn]
-   (reduce-kv #(assoc %1 (key-fn %2 %3) (val-fn %2 %3)) {} map)))
+  ([m val-fn]
+   (map-map m (fn [k v] k) val-fn))
+  ([m key-fn val-fn]
+   (reduce-kv #(assoc %1 (key-fn %2 %3) (val-fn %2 %3)) {} m)))
 
+(defn count-when [f coll]
+  "Count the number of elements in coll where f returns true"
+  (count (filter f coll)))
