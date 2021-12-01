@@ -35,6 +35,10 @@
   ([m key-fn val-fn]
    (reduce-kv #(assoc %1 (key-fn %2 %3) (val-fn %2 %3)) {} m)))
 
-(defn count-when [f coll]
-  "Count the number of elements in coll where f returns true"
-  (count (filter f coll)))
+(defn count-when
+  "Count the number of elements in coll where f returns true. If not supplied use identity as f"
+  ([coll] (count-when coll identity))
+  ([coll f] (count (filter f coll))))
+
+(defn parse-int [str]
+  (Integer/parseInt str))
