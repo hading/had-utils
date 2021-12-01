@@ -1,6 +1,7 @@
 # had-utils
 
-A Clojure library designed to ... well, that part is up to you.
+My utility functions for Clojure. This stuff isn't even remotely organized yet. If I accumulate enough of them
+maybe I will do better. You can probably find the equivalent in a more polished library.
 
 ## Usage
 
