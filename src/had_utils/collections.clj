@@ -7,7 +7,7 @@
   Note that to make the usage more natural the optional key-fn
   argument goes in the second place when used."
   ([m val-fn]
-   (map-map m (fn [k _] k) val-fn))
+   (map-kv m (fn [k _] k) val-fn))
   ([m key-fn val-fn]
    (reduce-kv #(assoc %1 (key-fn %2 %3) (val-fn %2 %3)) {} m)))
 
