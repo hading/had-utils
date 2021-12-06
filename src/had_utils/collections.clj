@@ -6,10 +6,10 @@
   a function of two arguments, the key and value.
   Note that to make the usage more natural the optional key-fn
   argument goes in the second place when used."
-  ([m val-fn]
-   (map-kv m (fn [k _] k) val-fn))
-  ([m key-fn val-fn]
-   (reduce-kv #(assoc %1 (key-fn %2 %3) (val-fn %2 %3)) {} m)))
+  ([val-fn coll]
+   (map-kv (fn [k _] k) val-fn coll))
+  ([key-fn val-fn coll]
+   (reduce-kv #(assoc %1 (key-fn %2 %3) (val-fn %2 %3)) {} coll)))
 
 (def map-map map-kv)
 
@@ -17,6 +17,11 @@
   "Count the number of elements in coll where f returns true. If not supplied use identity as f."
   ([coll] (count-when coll identity))
   ([coll f] (count (filter f coll))))
+
+(defn count-by [f coll]
+  "Count the number "
+  (->> (group-by f coll)
+       (map-kv (fn [k v] (count v)))))
 
 (defn transpose [seqs]
   "Transpose a rectangular sequence of sequences."
