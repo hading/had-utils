@@ -19,7 +19,7 @@
   ([coll f] (count (filter f coll))))
 
 (defn count-by [f coll]
-  "Count the number "
+  "Count the number of items for each return value of f."
   (->> (group-by f coll)
        (map-kv (fn [k v] (count v)))))
 

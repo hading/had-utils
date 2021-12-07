@@ -7,3 +7,6 @@
    (Integer/parseInt str))
   ([str radix]
    (Integer/parseInt str radix)))
+
+(defn abs [x]
+  (if (< x 0) (- x ) x))
