@@ -23,3 +23,4 @@
   "Slurp a file and split into lines"
   [path]
   (str/split-lines (slurp path)))
+
