@@ -18,3 +18,15 @@ and return the first iterate that makes pred true."
   (->> (iterate f x)
        (filter pred)
        first))
+
+(defn reverse-args [f]
+  "Given a function returns a new function that takes its
+arguments in the reverse order."
+  (fn [& args] (apply f (reverse args))))
+
+(defn flip-args [f]
+  "Given a function that takes at least two arguments
+returns a new function that reverses the order of
+the first two arguments"
+  (fn [x y & rest]
+    (apply f y x rest)))
