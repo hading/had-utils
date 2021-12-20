@@ -30,10 +30,14 @@
       acc
       (recur (map rest xs) (conj acc (map first xs))))))
 
-;;;The next three are useful largely for AoC problems
+;;;The next few are useful largely for AoC problems
 (defn bracket [coll i]
   "Add the element i to the start and end of coll."
   (concat [i] coll [i]))
+
+(defn bracketv [coll i]
+  "Add the element i to the start and end of coll and return a vector."
+  (vec (bracket coll i)))
 
 (defn border [grid i]
   "grid should be a rectangular collection of collections. Adds i
@@ -42,6 +46,14 @@ as a border around the supplied grid."
         cols (count (first bracketed-grid))
         border-row (take cols (repeat i))]
     (concat [border-row] bracketed-grid [border-row])))
+
+(defn borderv [grid i]
+  "grid should be a rectangular collection of collections. Adds i
+as a border around the supplied grid. Return a vector of vectors"
+  (let [bracketed-grid (mapv #(bracketv % i) grid)
+        cols (count (first bracketed-grid))
+        border-row (vec (take cols (repeat i)))]
+    (vec (concat [border-row] bracketed-grid [border-row]))))
 
 (defn border-and-flatten [grid i]
   "borders the grid with element i and then makes it into a
