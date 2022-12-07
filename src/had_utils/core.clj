@@ -1,9 +1,12 @@
 (ns had-utils.core)
 
-(defn step-state-on-input [initial-state step-f input-seq]
-  "Take an initial state initial-state, a function that steps
-the state based on pieces of input step-f and a sequence
-of pieces of input. Step the state over all of the input."
+(defn step-state-on-input
+  "Take an `initial-state`, a function `step-f` that
+  produces a new state based on a current state and
+  piece of input, and a sequence of input `input-seq`
+  and return the final state after stepping over all
+  the input."
+  [initial-state step-f input-seq]
   (loop [state initial-state
          input input-seq]
     (if (empty? input)
@@ -11,21 +14,24 @@ of pieces of input. Step the state over all of the input."
       (recur (step-f state (first input)) (rest input)))))
 
 
-(defn iterate-until [f x pred]
-  "Iterate one argument function f on starting value x
-and return the first iterate that makes pred true."
+(defn iterate-until
+  "Iterate one argument function `f` on starting value `x`
+  and return the first iterate that makes `pred` true."
+  [f x pred]
   (->> (iterate f x)
        (filter pred)
        first))
 
-(defn reverse-args [f]
-  "Given a function returns a new function that takes its
+(defn reverse-args
+  "Given a function `f` returns a new function that takes its
 arguments in the reverse order."
+  [f]
   (fn [& args] (apply f (reverse args))))
 
-(defn flip-args [f]
-  "Given a function that takes at least two arguments
+(defn flip-args
+  "Given a function `f` that takes at least two arguments
 returns a new function that reverses the order of
 the first two arguments"
+  [f]
   (fn [x y & rest]
     (apply f y x rest)))

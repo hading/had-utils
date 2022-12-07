@@ -2,61 +2,68 @@
 
 (defn map-kv
   "Construct a new map from an existing one.
-  Each of val-fn and (optional - default (fn [k _] k)) key-fn are
+  Each of `val-fn` and `key-fn` (optional - default `(fn [k _] k))` are
   a function of two arguments, the key and value.
-  Note that to make the usage more natural the optional key-fn
-  argument goes in the second place when used."
+  Note that to make the usage more natural the optional `key-fn`
+  is the first argument when used."
   ([val-fn coll]
    (map-kv (fn [k _] k) val-fn coll))
   ([key-fn val-fn coll]
    (reduce-kv #(assoc %1 (key-fn %2 %3) (val-fn %2 %3)) {} coll)))
 
-(def map-map map-kv)
-
 (defn count-when
-  "Count the number of elements in coll where f returns true. If not supplied use identity as f."
+  "Count the number of elements in `coll` where `f` returns true.
+  If not supplied use identity as `f`."
   ([coll] (count-when coll identity))
   ([coll f] (count (filter f coll))))
 
-(defn count-by [f coll]
-  "Count the number of items for each return value of f."
+(defn count-by
+  "Return a map from the distinct values of `f` applied to `coll`
+  to the frequencies they occur."
+  [f coll]
   (->> (group-by f coll)
        (map-kv (fn [k v] (count v)))))
 
-(defn transpose [seqs]
+(defn transpose
   "Transpose a rectangular sequence of sequences."
+  [seqs]
   (loop [xs seqs acc []]
     (if (empty? (first xs))
       acc
       (recur (map rest xs) (conj acc (map first xs))))))
 
 ;;;The next few are useful largely for AoC problems
-(defn bracket [coll i]
-  "Add the element i to the start and end of coll."
+(defn bracket
+  "Add the element `i` to the start and end of `coll`."
+  [coll i]
   (concat [i] coll [i]))
 
-(defn bracketv [coll i]
-  "Add the element i to the start and end of coll and return a vector."
+(defn bracketv
+  "Add the element `i` to the start and end of `coll` and return a vector."
+  [coll i]
   (vec (bracket coll i)))
 
-(defn border [grid i]
-  "grid should be a rectangular collection of collections. Adds i
+(defn border
+  "`grid` should be a rectangular collection of collections. Adds `i`
 as a border around the supplied grid."
+  [grid i]
   (let [bracketed-grid (map #(bracket % i) grid)
         cols (count (first bracketed-grid))
         border-row (take cols (repeat i))]
     (concat [border-row] bracketed-grid [border-row])))
 
-(defn borderv [grid i]
-  "grid should be a rectangular collection of collections. Adds i
-as a border around the supplied grid. Return a vector of vectors"
+(defn borderv
+  "`grid` should be a rectangular collection of collections. Adds `i`
+  as a border around `grid`. Return a vector of vectors"
+  [grid i]
   (let [bracketed-grid (mapv #(bracketv % i) grid)
         cols (count (first bracketed-grid))
         border-row (vec (take cols (repeat i)))]
     (vec (concat [border-row] bracketed-grid [border-row]))))
 
-(defn border-and-flatten [grid i]
-  "borders the grid with element i and then makes it into a
+(defn border-and-flatten
+  "Borders `grid` with `i` and then makes it into a
 one dimensional vector"
+  [grid i]
   (vec (flatten (border grid i))))
 
