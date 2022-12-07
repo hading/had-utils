@@ -1,16 +1,15 @@
 (ns had-utils.core)
 
-;;This should become irrelevant when Clojure 1.11 adds this type of function
-(defn parse-int
-  "Parse integer with default radix 10."
-  ([str]
-   (Integer/parseInt str))
-  ([str radix]
-   (Integer/parseInt str radix)))
+(defn step-state-on-input [initial-state step-f input-seq]
+  "Take an initial state initial-state, a function that steps
+the state based on pieces of input step-f and a sequence
+of pieces of input. Step the state over all of the input."
+  (loop [state initial-state
+         input input-seq]
+    (if (empty? input)
+      state
+      (recur (step-f state (first input)) (rest input)))))
 
-(defn abs [x]
-  "Absolute value of the number x"
-  (if (< x 0) (- x ) x))
 
 (defn iterate-until [f x pred]
   "Iterate one argument function f on starting value x
