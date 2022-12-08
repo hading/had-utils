@@ -32,6 +32,15 @@
       acc
       (recur (map rest xs) (conj acc (map first xs))))))
 
+(defn transposev
+  "Transpose a rectangular sequence of sequences,
+  returning a vector of vectors."
+  [seqs]
+  (->>
+   (transpose seqs)
+   (map vec)
+   vec))
+
 ;;;The next few are useful largely for AoC problems
 (defn bracket
   "Add the element `i` to the start and end of `coll`."
