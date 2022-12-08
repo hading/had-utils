@@ -1,15 +1,17 @@
 # had-utils
 
-My utility functions for Clojure. This stuff isn't even remotely organized yet. If I accumulate enough of them
-maybe I will do better. You can probably find the equivalent in a more polished library.
+My utility functions for Clojure, largely for Advent of Code
+puzzles.
 
-## Usage
+This stuff isn't even remotely organized yet. If I accumulate enough
+of them maybe I will do better. You can probably find the equivalent
+in a more polished library - these are mostly the result of writing
+them being easier than tracking down a library that already has them.
 
-FIXME
 
 ## License
 
-Copyright © 2020 FIXME
+Copyright © 2022 Howard A. Ding
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
