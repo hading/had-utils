@@ -87,13 +87,6 @@ one dimensional vector"
                   [(- cols) -1 1 cols])]
     (mapv (partial + loc) offsets)))
 
-(defn neighbors-with-diagonals
-    "`loc` is assumed to be a coordinate into a flattened two-dimensional grid with `cols` columens.
-  Gives a vector of the coordinates of horizontal, vertical, and diagonal neighbors.
-  Does not check bounds."
-  [cols loc]
-  (neighbors cols loc :with-diagonal true))
-
 (defn multiget
   "Return a vector of the values at all `indexes` in `vec`"
   [vec indexes]
@@ -102,11 +95,6 @@ one dimensional vector"
 (defn neighbor-vals
   "`grid` is a 1-d flattened version of a 2-d grid with `cols` columns. Given the 1-d coordinate
   `loc` gives all values of horizontal and vertical neighbors in the grid in a vector."
-  [grid cols loc]
-  (multiget grid (neighbors cols loc)))
+  [grid cols loc & {:keys [:with-diagonal]}]
+  (multiget grid (neighbors cols loc :with-diagonal with-diagonal)))
 
-(defn neighbor-with-diagonals-vals
-    "`grid` is a 1-d flattened version of a 2-d grid with `cols` columns. Given the 1-d coordinate
-  `loc` gives all values of horizontal, vertical, and diagonal neighbors in the grid in a vector."
-  [grid cols loc]
-  (multiget grid (neighbors-with-diagonals cols loc)))
