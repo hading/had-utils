@@ -83,7 +83,7 @@ one dimensional vector"
   [cols loc & {:keys [:with-diagonal]}]
   (let [offsets (if with-diagonal
                   (let [ncols (- cols)]
-                    [(dec ncols) ncols (inc ncols) -1 1 (inc cols) cols (dec cols)])
+                    [(dec ncols) ncols (inc ncols) -1 1 (dec cols) cols (inc cols)])
                   [(- cols) -1 1 cols])]
     (mapv (partial + loc) offsets)))
 
