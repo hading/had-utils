@@ -89,3 +89,21 @@ one dimensional vector"
   [cols loc]
   (let [ncols (- cols)]
     (mapv (partial + loc) [-1 1 cols (inc cols) (dec cols) ncols (inc ncols) (dec ncols)])))
+
+(defn multiget
+  "Return a vector of the values at all `indexes` in `vec`"
+  [vec indexes]
+  (for [i indexes]
+    (get vec i)))
+
+(defn neighbor-vals
+  "`grid` is a 1-d flattened version of a 2-d grid with `cols` columns. Given the 1-d coordinate
+  `loc` gives all values of horizontal and vertical neighbors in the grid in a vector."
+  [grid cols loc]
+  (multiget grid (neighbors cols loc)))
+
+(defn neighbor-with-diagonals-vals
+    "`grid` is a 1-d flattened version of a 2-d grid with `cols` columns. Given the 1-d coordinate
+  `loc` gives all values of horizontal, vertical, and diagonal neighbors in the grid in a vector."
+  [grid cols loc]
+  (multiget grid (neighbors-with-diagonals cols loc)))
