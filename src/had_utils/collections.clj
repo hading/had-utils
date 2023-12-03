@@ -76,3 +76,16 @@ one dimensional vector"
   [grid i]
   (vec (flatten (border grid i))))
 
+(defn neighbors
+  "`loc` is assumed to be a coordinate into a flattened two-dimensional grid with `cols` columens.
+  Gives a vector of coordinates of the horizontal and vertical neighbors. Does not check bounds."
+  [cols loc]
+  (mapv (partial + loc) [-1 1 cols (- cols)]))
+
+(defn neighbors-with-diagonals
+    "`loc` is assumed to be a coordinate into a flattened two-dimensional grid with `cols` columens.
+  Gives a vector of the coordinates of horizontal, vertical, and diagonal neighbors.
+  Does not check bounds."
+  [cols loc]
+  (let [ncols (- cols)]
+    (mapv (partial + loc) [-1 1 cols (inc cols) (dec cols) ncols (inc ncols) (dec ncols)])))
