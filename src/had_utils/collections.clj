@@ -24,6 +24,11 @@
   (->> (group-by f coll)
        (map-kv (fn [k v] (count v)))))
 
+(defn filter-first
+  "Find the first element in `coll` for which `pred` returns true"
+  [pred coll]
+  (first (filter pred coll)))
+
 (defn transpose
   "Transpose a rectangular sequence of sequences."
   [seqs]
