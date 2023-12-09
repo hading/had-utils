@@ -7,6 +7,7 @@
     a
     (recur b (mod a b))))
 
-(defn lcm [a b]
+(defn lcm
   "Find the least common multiple of `a` and `b`"
+  [a b]
   (/ (* a b) (gcd a b)))
