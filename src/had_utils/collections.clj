@@ -103,3 +103,13 @@ one dimensional vector"
   [grid cols loc & {:keys [:with-diagonal]}]
   (multiget grid (neighbors cols loc :with-diagonal with-diagonal)))
 
+(defn pairs [seq]
+  "Given `seq` (x0 x1 ... xn) returns a sequence of pairs
+  ((x0 x1) (x0 x2) ... (x0 xn) (x1 x2) ...)"
+  (loop [seq seq
+         pairs []]
+    (let [ys (rest seq)]
+      (if (empty? ys)
+        pairs
+        (recur ys
+               (concat pairs (map (partial list (first seq)) ys)))))))
