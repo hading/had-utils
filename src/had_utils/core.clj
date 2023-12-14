@@ -1,18 +1,5 @@
 (ns had-utils.core)
 
-(defn step-state-on-input
-  "Take an `initial-state`, a function `step-f` that
-  produces a new state based on a current state and
-  piece of input, and a sequence of input `input-seq`
-  and return the final state after stepping over all
-  the input."
-  [initial-state step-f input-seq]
-  (loop [state initial-state
-         input input-seq]
-    (if (empty? input)
-      state
-      (recur (step-f state (first input)) (rest input)))))
-
 (defn update-vec-state [f initial-v]
   "Take the initial vector `init-v` and the function
 `f` of vec and index, and successively update state by
