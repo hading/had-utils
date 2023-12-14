@@ -16,6 +16,25 @@ index."
        (filter pred)
        first))
 
+(defn fixed-point-n
+  "Iterate one argument function `f` on starting value `x`
+  unil a fixed point is reached, returning [`fixed-point` `n``]
+  where `n` is the number of iterations needed to reach the fixed point.
+  If `max-iterations` is provided then will return nil after applying
+  `f` that many times instead of running forever."
+  ([f x]
+   (fixed-point-n f x nil))
+  ([f x max-iterations]
+   (loop [x x
+          n 0
+          max-iterations max-iterations]
+     (let [fx (f x)]
+       (cond (= x fx) [x n]
+             (= max-iterations 0) nil
+             :otherwise (recur fx
+                               (inc n)
+                               (when max-iterations (dec max-iterations))))))))
+
 (defn reverse-args
   "Given a function `f` returns a new function that takes its
 arguments in the reverse order."
