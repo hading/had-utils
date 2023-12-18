@@ -1,6 +1,7 @@
 (ns had-utils.collections
   (:require
-   [ubergraph.core :as uc]))
+   [ubergraph.core :as uc]
+   [had-utils.math :as hm]))
 
 (defn map-kv
   "Construct a new map from an existing one.
@@ -83,28 +84,50 @@ one dimensional vector"
   [grid i]
   (vec (flatten (border grid i))))
 
-(def straight-2d-offsets (vec (sort [[1 0] [-1 0] [0 1] [0 -1]])))
-(def diagonal-2d-offsets [[-1 -1] [1 -1] [-1 1] [1 1]])
-(def all-2d-offsets (vec (sort (concat straight-2d-offsets diagonal-2d-offsets))))
+(def straight-2d-offsets
+  "Rectilinear offsets in 2d."
+  (vec (sort [[1 0] [-1 0] [0 1] [0 -1]])))
+(def diagonal-2d-offsets
+  "Diagonal offsets in 2d."
+  [[-1 -1] [1 -1] [-1 1] [1 1]])
+(def all-2d-offsets
+  "Rectilinear and diagonal offsets in 2d"
+  (vec (sort (concat straight-2d-offsets diagonal-2d-offsets))))
+
+(defn in-grid?
+  "Is the given row and column in the grid?"
+  ([grid [row col]] (in-grid? grid row col))
+  ([grid row col] (and (< -1 row (count grid))
+                       (< -1 col (count (first grid))))))
+
+(defn in-grid-pred
+  "Returns a predicate on row and col or [row col] that says if
+  that row and column are in the grid."
+  [grid]
+  (fn
+    pred
+    ([[row col]] (pred row col))
+    ([row col] (and (< -1 row (count grid))
+                    (< -1 col (count (first grid)))))))
 
 (defn neighbors-2d
   "`loc` is a [row col] coordinate in a 2d grid `grid`. Gives a vector of coordinates of horizontal
   and vertical neighbors, and also diagonal ones if `:with-diagonal` is true. Does not give neighbors
   that exceed the bounds of the grid."
   [grid loc & {:keys [:with-diagonal]}]
-  (let [offsets (if with-diagonal all-2d-offsets straight-2d-offsets)
-        in-range (fn [[row col]] (and (< -1 row (count grid))
-                                      (< -1 col (count (first grid)))))]
+  (let [offsets (if with-diagonal all-2d-offsets straight-2d-offsets)]
     (->> offsets
-         (mapv (partial mapv + loc))
-         (filter in-range))))
+         (mapv (partial hm/add-vectors loc))
+         (filterv (in-grid-pred grid)))))
 
 (defn neighbors-2d-map
     "`loc` is a [row col] coordinate in a 2d grid `grid`. Gives a map of coordinates of horizontal
   and vertical neighbors, and also diagonal ones if `:with-diagonal` is true, to their values in the grid.
   Does not give neighbors that exceed the bounds of the grid."
   [grid loc & {:keys [:with-diagonal]}]
-  (reduce (fn [acc loc] (assoc acc loc (get-in grid loc))) {} (neighbors-2d grid loc :with-diagonal with-diagonal)))
+  (reduce (fn [acc loc] (assoc acc loc (get-in grid loc)))
+          {}
+          (neighbors-2d grid loc :with-diagonal with-diagonal)))
 
 (defn neighbors-2d-vals
     "`loc` is a [row col] coordinate in a 2d grid `grid`. Gives a seq of values of horizontal
@@ -133,9 +156,10 @@ one dimensional vector"
                                           n (neighbors-2d grid [row col] :with-diagonal with-diagonal)]
                                       [[row col] n])))))
 
-(defn pairs [seq]
+(defn pairs
   "Given `seq` (x0 x1 ... xn) returns a sequence of pairs
   ((x0 x1) (x0 x2) ... (x0 xn) (x1 x2) ...)"
+  [seq]
   (loop [seq seq
          pairs []]
     (let [ys (rest seq)]

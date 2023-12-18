@@ -25,3 +25,8 @@
   (->> (map - p1 p2)
        (map abs)
        (apply max)))
+
+(defn add-vectors
+  "Add two vectors of numbers of the same dimension"
+  [v1 v2]
+  (mapv + v1 v2))
