@@ -1,11 +1,12 @@
 (ns had-utils.core)
 
-(defn update-vec-state [f initial-v]
-  "Take the initial vector `init-v` and the function
+(defn update-vec-state
+  "Take the initial vector `initial-v` and the function
 `f` of vec and index, and successively update state by
 applying `f` to the current state and indexes.
 Basically a reduce over the state where you can use the
 index."
+  [f initial-v]
   (reduce f initial-v (range (count initial-v))))
 
 (defn iterate-until
