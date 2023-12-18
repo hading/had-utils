@@ -1,9 +1,10 @@
-(defproject org.clojars.hading/had-utils "4.0.0"
+(defproject org.clojars.hading/had-utils "5.0.0"
   :description "Personal utilites"
   :url "https://github.com/hading/had-utils"
   :license {:name "Apache License, Version 2.0"
             :url "https://www.apache.org/licenses/LICENSE-2.0.txt"}
-  :dependencies [[org.clojure/clojure "1.11.1"]]
+  :dependencies [[org.clojure/clojure "1.11.1"]
+                 [ubergraph "0.8.2"]]
   :plugins [[lein-codox "0.10.8"]]
   :codox {:output-path "doc"
           :metadata {:doc/format :markdown}}

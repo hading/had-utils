@@ -1,4 +1,6 @@
-(ns had-utils.collections)
+(ns had-utils.collections
+  (:require
+   [ubergraph.core :as uc]))
 
 (defn map-kv
   "Construct a new map from an existing one.
@@ -81,27 +83,55 @@ one dimensional vector"
   [grid i]
   (vec (flatten (border grid i))))
 
-(defn neighbors
-  "`loc` is assumed to be a coordinate into a flattened two-dimensional grid with `cols` columens.
-  Gives a vector of coordinates of the horizontal and vertical neighbors. Does not check bounds.
-  If `:with-diagonal` is true includes diagonal neighbors as well."
-  [cols loc & {:keys [:with-diagonal]}]
-  (let [offsets (if with-diagonal
-                  (let [ncols (- cols)]
-                    [(dec ncols) ncols (inc ncols) -1 1 (dec cols) cols (inc cols)])
-                  [(- cols) -1 1 cols])]
-    (mapv (partial + loc) offsets)))
+(def straight-2d-offsets (vec (sort [[1 0] [-1 0] [0 1] [0 -1]])))
+(def diagonal-2d-offsets [[-1 -1] [1 -1] [-1 1] [1 1]])
+(def all-2d-offsets (vec (sort (concat straight-2d-offsets diagonal-2d-offsets))))
 
-(defn multiget
-  "Return a vector of the values at all `indexes` in `vec`"
-  [vec indexes]
-  (map (partial get vec) indexes))
+(defn neighbors-2d
+  "`loc` is a [row col] coordinate in a 2d grid `grid`. Gives a vector of coordinates of horizontal
+  and vertical neighbors, and also diagonal ones if `:with-diagonal` is true. Does not give neighbors
+  that exceed the bounds of the grid."
+  [grid loc & {:keys [:with-diagonal]}]
+  (let [offsets (if with-diagonal all-2d-offsets straight-2d-offsets)
+        in-range (fn [[row col]] (and (< -1 row (count grid))
+                                      (< -1 col (count (first grid)))))]
+    (->> offsets
+         (mapv (partial mapv + loc))
+         (filter in-range))))
 
-(defn neighbor-vals
-  "`grid` is a 1-d flattened version of a 2-d grid with `cols` columns. Given the 1-d coordinate
-  `loc` gives all values of horizontal and vertical neighbors in the grid in a vector."
-  [grid cols loc & {:keys [:with-diagonal]}]
-  (multiget grid (neighbors cols loc :with-diagonal with-diagonal)))
+(defn neighbors-2d-map
+    "`loc` is a [row col] coordinate in a 2d grid `grid`. Gives a map of coordinates of horizontal
+  and vertical neighbors, and also diagonal ones if `:with-diagonal` is true, to their values in the grid.
+  Does not give neighbors that exceed the bounds of the grid."
+  [grid loc & {:keys [:with-diagonal]}]
+  (reduce (fn [acc loc] (assoc acc loc (get-in grid loc))) {} (neighbors-2d grid loc :with-diagonal with-diagonal)))
+
+(defn neighbors-2d-vals
+    "`loc` is a [row col] coordinate in a 2d grid `grid`. Gives a seq of values of horizontal
+  and vertical neighbors, and also diagonal ones if `:with-diagonal` is true, to their values in the grid.
+  Does not give neighbors that exceed the bounds of the grid."
+  [grid loc & {:keys [:with-diagonal]}]
+  (vals (neighbors-2d-map grid loc :with-diagonal with-diagonal)))
+
+(defn grid-to-graph
+  "Makes an ubergraph graph from the grid and edge-fn. If directed is true it is a directed graph.
+  For each location [row col] we call edge-fn with the grid, the location, and each neighbor of the
+  location (including diagonal neighbors if :with-diagonal is true). If edge-fn is true an edge is
+  created from location to neighbor. If it is a number then that is assigned as the weight of the edge.
+  Note that for undirected graphs edge-fn should be symmetrical in the location and neighbor location
+  or there may be unexpected behavior, as it will be called twice."
+  [grid edge-fn & {:keys [:with-diagonal :directed]}]
+  (let [graph (if directed (uc/digraph) (uc/graph))
+        update-fn (fn [g [location neighbor]]
+                    (let [result (edge-fn grid location neighbor)]
+                      (cond
+                        (number? result) (uc/add-edges g [location neighbor result])
+                        result (uc/add-edges g [location neighbor])
+                        :otherwise g)))]
+    (reduce update-fn graph (concat (for [row (range (count grid))
+                                          col (range (count (first grid)))
+                                          n (neighbors-2d grid [row col] :with-diagonal with-diagonal)]
+                                      [[row col] n])))))
 
 (defn pairs [seq]
   "Given `seq` (x0 x1 ... xn) returns a sequence of pairs
