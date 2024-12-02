@@ -24,3 +24,6 @@
   [path]
   (str/split-lines (slurp path)))
 
+(defn line->ints [line]
+  (->> (str/split line #"\D+")
+       (mapv parse-long)))
