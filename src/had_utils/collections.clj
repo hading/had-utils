@@ -17,8 +17,8 @@
 (defn count-when
   "Count the number of elements in `coll` where `f` returns true.
   If not supplied use identity as `f`."
-  ([coll] (count-when coll identity))
-  ([coll f] (count (filter f coll))))
+  ([coll] (count-when identity coll))
+  ([f coll] (count (filter f coll))))
 
 (defn count-by
   "Return a map from the distinct values of `f` applied to `coll`
