@@ -19,6 +19,14 @@
   [path map-fn]
   (slurp-split-map path #"\n" map-fn))
 
+(defn slurp-grid
+  "Slurp the file at `path`, making a two-d grid of one character substrings. If
+  `f` is supplied then map it over each substring."
+  ([path] (slurp-grid path identity))
+  ([path f]
+   (-> (slurp-lines-map path #(mapv f (str/split % #"")))
+       vec)))
+
 (defn slurp-lines
   "Slurp the file at `path` and split into lines"
   [path]

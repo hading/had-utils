@@ -71,12 +71,17 @@ as a border around the supplied grid."
 
 (defn borderv
   "`grid` should be a rectangular collection of collections. Adds `i`
-  as a border around `grid`. Return a vector of vectors"
-  [grid i]
-  (let [bracketed-grid (mapv #(bracketv % i) grid)
-        cols (count (first bracketed-grid))
-        border-row (vec (take cols (repeat i)))]
-    (vec (concat [border-row] bracketed-grid [border-row]))))
+  as a border around `grid`. If `n` >= 1 is supplied do this n times.
+  Return a vector of vectors"
+  ([grid i n]
+   (let [bracketed-grid (mapv #(bracketv % i) grid)
+         cols (count (first bracketed-grid))
+         border-row (vec (take cols (repeat i)))
+         bordered-grid (vec (concat [border-row] bracketed-grid [border-row]))]
+     (if (= n 1)
+       bordered-grid
+       (borderv bordered-grid i (dec n)))))
+  ([grid i] (borderv grid i 1)))
 
 (defn border-and-flatten
   "Borders `grid` with `i` and then makes it into a
