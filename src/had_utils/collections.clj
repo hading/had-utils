@@ -172,3 +172,13 @@ one dimensional vector"
         pairs
         (recur ys
                (concat pairs (map (partial list (first seq)) ys)))))))
+
+(defn grid-segment
+  "In `grid` get `length` entries going in `direction` [dx dy]
+   starting at `point` [row col] as a vector. If `f` is supplied
+   then return f applied to the vector instead. No bounds checking is done."
+  ([grid length point direction f]
+     (->> (take length (iterate (partial hm/add-vectors direction) point))
+          (mapv #(get-in grid %))
+          (apply f))))
+  ([grid length point direction] (grid-segment grid length point direction identity)))
