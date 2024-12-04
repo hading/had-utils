@@ -183,6 +183,18 @@ one dimensional vector"
           (apply f)))
   ([grid length point direction] (grid-segment grid length point direction identity)))
 
+(defn grid-centered-segment
+  "In `grid` from `point` get `length` entries on either side (and point) starting at
+  point + length - direction and going to point + length * (direction).
+  Result returned as a vector. If `f` is supplied then return f applied to the vector. No
+  bounds checking.
+  E.g. if the grid is [[1 2 3] [4 5 6] [7 8 9]] then (grid-centered-segment grid 1 [1 1] [1 0])
+  returns [2 5 8]"
+  ([grid length point direction] (grid-centered-segment grid length point direction identity))
+  ([grid length point direction f]
+   (let [start (hm/add-vectors point (map (partial * (- length)) direction))]
+     (grid-segment grid (inc (* 2 length)) start direction f))))
+
 (defn grid-coordinates
   "All indexes of the 2-d `grid` as [row col] vecs. If `padding` is supplied then
   omit that many rows and cols around the edges. If `col-padding` and `row-padding` are
