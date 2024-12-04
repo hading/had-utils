@@ -1,5 +1,8 @@
 (ns had-utils.core)
 
+;;;I don't remember why I made this function in the
+;;;first place, and it's not obvious why it would be
+;;;useful.
 (defn update-vec-state
   "Take the initial vector `initial-v` and the function
 `f` of vec and index, and successively update state by
