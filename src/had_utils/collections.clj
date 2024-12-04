@@ -190,9 +190,9 @@ one dimensional vector"
   ([grid] (grid-coordinates 0 0))
   ([grid padding] (grid-coordinates padding padding))
   ([grid row-padding col-padding]
-     (for [row (range row-padding (- (count grid) row-padding))
-        col (range col-padding (- (count (first grid)) col-padding))]
-       [row col])))
+   (for [row (range row-padding (- (count grid) row-padding))
+         col (range col-padding (- (count (first grid)) col-padding))]
+     [row col])))
 
 (defn grid-mapcat
   "Map `f`, a function of the grid and point in the grid and returning a collection,
@@ -202,4 +202,4 @@ one dimensional vector"
   ([f grid] (grid-mapcat f grid 0 0))
   ([f grid padding] (grid-mapcat f grid padding padding))
   ([f grid row-padding col-padding]
-   (mapcat #(f grid p) (grid-coordinates grid row-padding col-padding))))
+   (mapcat #(f grid %) (grid-coordinates grid row-padding col-padding))))
