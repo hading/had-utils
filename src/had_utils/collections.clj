@@ -176,17 +176,17 @@ one dimensional vector"
 (defn grid-segment
   "In `grid` get `length` entries going in `direction` [dx dy]
    starting at `point` [row col] as a vector. If `f` is supplied
-   then return f applied to the vector instead. No bounds checking is done."
+   then call f on the vector instead. No bounds checking is done."
   ([grid length point direction f]
      (->> (take length (iterate (partial hm/add-vectors direction) point))
           (mapv #(get-in grid %))
-          (apply f)))
+          f))
   ([grid length point direction] (grid-segment grid length point direction identity)))
 
 (defn grid-centered-segment
   "In `grid` from `point` get `length` entries on either side (and point) starting at
   point + length - direction and going to point + length * (direction).
-  Result returned as a vector. If `f` is supplied then return f applied to the vector. No
+  Result returned as a vector. If `f` is supplied then call f on the vector. No
   bounds checking.
   E.g. if the grid is [[1 2 3] [4 5 6] [7 8 9]] then (grid-centered-segment grid 1 [1 1] [1 0])
   returns [2 5 8]"
