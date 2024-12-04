@@ -180,5 +180,5 @@ one dimensional vector"
   ([grid length point direction f]
      (->> (take length (iterate (partial hm/add-vectors direction) point))
           (mapv #(get-in grid %))
-          (apply f))))
+          (apply f)))
   ([grid length point direction] (grid-segment grid length point direction identity)))
