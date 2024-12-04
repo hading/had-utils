@@ -11,8 +11,7 @@
 (defn slurp-split
   "Slurp the file at `path` and split into parts on `split-re`."
   [path split-re]
-  (-> (slurp path)
-      (str/split split-re)))
+  (slurp-split-map path split-re identity))
 
 (defn slurp-lines-map
   "Slurp the file at `path`, split into lines, and map `map-fn` over the result."
@@ -32,6 +31,8 @@
   [path]
   (str/split-lines (slurp path)))
 
-(defn line->ints [line]
+(defn line->ints
+  "Get integers from a string. Assumes the string begins and ends with a digit."
+  [line]
   (->> (str/split line #"\D+")
        (mapv parse-long)))
