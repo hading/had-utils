@@ -215,3 +215,24 @@ one dimensional vector"
   ([f grid padding] (grid-mapcat f grid padding padding))
   ([f grid row-padding col-padding]
    (mapcat #(f grid %) (grid-coordinates grid row-padding col-padding))))
+
+(defn grid-flat-map
+  "Map `f`, a function of the grid and point in the grid, over `grid` and resulting in a flat sequence, so
+  the structure of the grid is lost.
+  If `padding`, `row-padding`, `col-padding` are used then restrict the coordinates as in `grid-coordinates."
+  ([f grid] (grid-mapcat f grid 0 0))
+  ([f grid padding] (grid-mapcat f grid padding padding))
+  ([f grid row-padding col-padding]
+   (map #(f grid %) (grid-coordinates grid row-padding col-padding))))
+
+(defn grid-map
+    "Map `f`, a function of the grid and point in the grid, over `grid` and resulting in a new grid.
+  If `padding`, `row-padding`, `col-padding` are used then restrict the coordinates as in `grid-coordinates`, so
+  the new grid will be smaller if there is padding"
+  ([f grid] (grid-map f grid 0 0))
+  ([f grid padding] (grid-map f grid padding padding))
+  ([f grid row-padding col-padding]
+   (->> (grid-flat-map f grid row-padding col-padding)
+        (partition (- (count (first grid)) (* 2 col-padding)))
+        (map vec)
+        vec)))
