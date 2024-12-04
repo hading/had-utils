@@ -182,3 +182,14 @@ one dimensional vector"
           (mapv #(get-in grid %))
           (apply f)))
   ([grid length point direction] (grid-segment grid length point direction identity)))
+
+(defn grid-coordinates
+  "All indexes of the 2-d `grid` as [row col] vecs. If `padding` is supplied then
+  omit that many rows and cols around the edges. If `col-padding` and `row-padding` are
+  supplied then omit respectively for rows and cols."
+  ([grid] (grid-coordinates 0 0))
+  ([grid padding] (grid-coordinates padding padding))
+  ([grid row-padding col-padding]
+     (for [row (range row-padding (- (count grid) row-padding))
+        col (range col-padding (- (count (first grid)) col-padding))]
+    [row col])))
