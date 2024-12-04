@@ -28,7 +28,8 @@
        (map-kv (fn [k v] (count v)))))
 
 (defn filter-first
-  "Find the first element in `coll` for which `pred` returns true"
+  "Find the first element in `coll` for which `pred` returns true.
+  nil if none are found."
   [pred coll]
   (first (filter pred coll)))
 
@@ -236,3 +237,19 @@ one dimensional vector"
         (partition (- (count (first grid)) (* 2 col-padding)))
         (map vec)
         vec)))
+
+(defn grid-simple-map
+  "A convenience to map `f` over `grid`, returning a vector of vectors"
+  [f grid]
+  (mapv (partial mapv f) grid))
+
+(defn subgrid [grid row-start row-end col-start col-end]
+  "Get a subgrid of the given grid with the normal start/end conventions.
+   Returns a vector of vectors."
+  (->>
+   (for [row (range row-start row-end)
+         col (range col-start col-end)]
+     (get-in grid [row col]))
+   (partition (- col-end col-start))
+   (map vec)
+   vec))
