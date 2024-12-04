@@ -1,14 +1,17 @@
 (ns had-utils.math)
 
 (defn gcd
-  "Find the greatest common denominator of `a` and `b`"
+  "Find the greatest common denominator of `a` and `b`.
+   Always return a non-negative number."
   [a b]
-  (if (zero? b)
-    a
-    (recur b (mod a b))))
+  (loop [a (abs a)
+         b (abs b)]
+    (if (zero? b)
+      a
+      (recur b (mod a b)))))
 
 (defn lcm
-  "Find the least common multiple of `a` and `b`"
+  "Find the least common multiple of `a` and `b`, both positive."
   [a b]
   (/ (* a b) (gcd a b)))
 
