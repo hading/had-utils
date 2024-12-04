@@ -220,8 +220,8 @@ one dimensional vector"
   "Map `f`, a function of the grid and point in the grid, over `grid` and resulting in a flat sequence, so
   the structure of the grid is lost.
   If `padding`, `row-padding`, `col-padding` are used then restrict the coordinates as in `grid-coordinates."
-  ([f grid] (grid-mapcat f grid 0 0))
-  ([f grid padding] (grid-mapcat f grid padding padding))
+  ([f grid] (grid-flat-map f grid 0 0))
+  ([f grid padding] (grid-flat-map f grid padding padding))
   ([f grid row-padding col-padding]
    (map #(f grid %) (grid-coordinates grid row-padding col-padding))))
 

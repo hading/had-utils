@@ -1,4 +1,4 @@
-(defproject org.clojars.hading/had-utils "6.1.1"
+(defproject org.clojars.hading/had-utils "6.1.2"
   :description "Personal utilites"
   :url "https://github.com/hading/had-utils"
   :license {:name "Apache License, Version 2.0"
