@@ -243,9 +243,10 @@ one dimensional vector"
   [f grid]
   (mapv (partial mapv f) grid))
 
-(defn subgrid [grid row-start row-end col-start col-end]
+(defn subgrid
   "Get a subgrid of the given grid with the normal start/end conventions.
    Returns a vector of vectors."
+  [grid row-start row-end col-start col-end]
   (->>
    (for [row (range row-start row-end)
          col (range col-start col-end)]
