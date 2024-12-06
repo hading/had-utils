@@ -207,6 +207,20 @@ one dimensional vector"
          col (range col-padding (- (count (first grid)) col-padding))]
      [row col])))
 
+(defn filter-grid-coordinates
+  "All indexes of the 2-d `grid` as [row col] vecs where the value satisfies the
+  predicate `f`. If `padding` is supplied then
+  omit that many rows and cols around the edges. If `col-padding` and `row-padding` are
+  supplied then omit respectively for rows and cols."
+  ([f grid] (filter-grid-coordinates f grid 0 0))
+  ([f grid padding] (filter-grid-coordinates f grid padding padding))
+  ([f grid row-padding col-padding]
+   (for [row (range row-padding (- (count grid) row-padding))
+         col (range col-padding (- (count (first grid)) col-padding))
+         :when (f (get-in grid [row col]))]
+     [row col] )))
+
+
 (defn grid-mapcat
   "Map `f`, a function of the grid and point in the grid and returning a collection,
   over `grid` and concatenate the results.
