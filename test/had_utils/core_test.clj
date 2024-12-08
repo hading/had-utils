@@ -41,6 +41,10 @@
   (testing "Trivial iteration until goal is reached"
     (is (= 1 (hcore/iterate-until (partial * 2) 1 (partial < 0))))))
 
+(deftest test-iterates-while
+  (testing "Get all iterates while a predicate is true"
+    (is (= (range 5) (hcore/iterates-while inc 0 (partial >= 4))))))
+
 (deftest test-reverse-args
   (testing "We can reverse the arguments of functions."
     (let [sub (fn [x y] (- x y))

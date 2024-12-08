@@ -20,6 +20,13 @@ index."
        (filter pred)
        first))
 
+(defn iterates-while
+  "Iterate one argument function `f` on starting value `x`
+  and return the sequence until the predicate `pred` returns false.
+  Just (take-while pred (iterate f x))."
+  [f x pred]
+  (take-while pred (iterate f x)))
+
 (defn fixed-point-n
   "Iterate one argument function `f` on starting value `x`
   unil a fixed point is reached, returning [`fixed-point` `n``]
