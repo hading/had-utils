@@ -3,12 +3,14 @@
 My utility functions for Clojure, largely for Advent of Code
 puzzles.
 
-This stuff isn't even remotely organized yet. If I accumulate enough
-of them maybe I will do better. You can probably find the equivalent
-in a more polished library - these are mostly the result of writing
-them being easier than tracking down a library that already has them.
+This stuff is only vaguely organized and you can probably find the
+equivalent in a more polished library - these are mostly the result of
+writing them being easier than tracking down a library that already
+has them.
 
-Given the stated goal, efficiency is generally not a priority.
+Given the stated goal, efficiency and careful error checking is
+generally not a priority, and there are a lot of functions specialized
+for those kinds of problems.
 
 
 ## License
