@@ -8,9 +8,10 @@ equivalent in a more polished library - these are mostly the result of
 writing them being easier than tracking down a library that already
 has them.
 
-Given the stated goal, efficiency and careful error checking is
-generally not a priority, and there are a lot of functions specialized
-for those kinds of problems.
+Given the stated goal:
+
+- There are a lot of functions specialized for those kinds of problems.
+- Efficiency and careful error checking are generally not a priority.
 
 
 ## License
