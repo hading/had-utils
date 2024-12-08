@@ -30,6 +30,16 @@
        (apply max)))
 
 (defn add-vectors
-  "Add two vectors of numbers of the same dimension"
+  "Add two or more vectors of numbers of the same dimension"
+  [v1 & vs]
+  (reduce (partial mapv +) v1 vs))
+
+(defn invert-vector
+  "Multiply vector by -1"
+  [v]
+  (mapv (partial -) v))
+
+(defn subtract-vectors
+  "Subtract two vectors of numbers of the same dimension"
   [v1 v2]
-  (mapv + v1 v2))
+  (add-vectors v1 (invert-vector v2)))

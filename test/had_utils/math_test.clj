@@ -10,7 +10,9 @@
 (deftest test-add-vectors
   (testing "Add vectors"
     (is (= [9 5] (hm/add-vectors v1 v2)))
-    (is (= [9 9 7 6] (hm/add-vectors v3 v4)))))
+    (is (= [9 9 7 6] (hm/add-vectors v3 v4)))
+    (is (= [10 7] (hm/add-vectors v1 v1 v2)))
+    (is (= v3 (hm/add-vectors v3)))))
 
 (deftest test-gcd
   (testing "GCD of numbers"
@@ -21,6 +23,11 @@
     (is (= 1 (hm/gcd 13 -97)))
     (is (= 1 (hm/gcd -13 97)))
     (is (= 7 (hm/gcd -35 -77)))))
+
+(deftest test-invert-vector
+  (testing "Inverting vector"
+    (is (= [0 0] (hm/invert-vector [0 0])))
+    (is (= [-1 -2 -3] (hm/invert-vector [1 2 3])))))
 
 (deftest test-lcm
   (testing "LCM of numbers"
@@ -38,3 +45,8 @@
     (is (= 7 (hm/linf-distance v1 v2)))
     (is (= 7 (hm/linf-distance v3 v4)))
     (is (= 0 (hm/linf-distance v3 v3)))))
+
+(deftest test-subtract-vectors
+  (testing "We can subtract vectors"
+    (is (= [0 0] (hm/subtract-vectors v1 v1)))
+    (is (= [7 1] (hm/subtract-vectors v2 v1)))))
