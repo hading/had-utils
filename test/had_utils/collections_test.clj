@@ -66,6 +66,11 @@
     (is (= [] (hc/filter-grid-coordinates (partial < 10) medium-grid)))
     (is (= [[0 1] [1 0] [1 2] [2 1]] (hc/filter-grid-coordinates even? medium-grid)))))
 
+(deftest test-filter-in-grid
+  (testing "We can filter a collection of points to determine which are in a grid"
+    (is (= [[0 0] [2 2]]
+           (hc/filter-in-grid medium-grid [[0 0] [-1 1] [1 3] [2 2]])))))
+
 (deftest test-grid-centered-segment
   (testing "We can get a segment in a grid centered at a particular point"
     (is (= [2 5 8] (hc/grid-centered-segment medium-grid 1 [1 1] [1 0])))

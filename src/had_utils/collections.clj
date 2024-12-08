@@ -106,6 +106,11 @@ one dimensional vector"
   ([grid row col] (and (< -1 row (count grid))
                        (< -1 col (count (first grid))))))
 
+(defn filter-in-grid
+  "Return only those points in the grid"
+  [grid points]
+  (filter (partial in-grid? grid) points))
+
 (defn in-grid-pred
   "Returns a predicate on row and col or [row col] that says if
   that row and column are in the grid."
