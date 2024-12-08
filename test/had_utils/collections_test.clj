@@ -74,7 +74,9 @@
 (deftest test-grid-centered-segment
   (testing "We can get a segment in a grid centered at a particular point"
     (is (= [2 5 8] (hc/grid-centered-segment medium-grid 1 [1 1] [1 0])))
-    (is (= [7 5 3] (hc/grid-centered-segment medium-grid 1 [1 1] [-1 1])))))
+    (is (= [7 5 3] (hc/grid-centered-segment medium-grid 1 [1 1] [-1 1]))))
+  (testing "We only get the part in the grid if the defined segment exits it."
+    (is (= [2 5 8] (hc/grid-centered-segment medium-grid 3 [1 1] [1 0])))))
 
 (deftest test-grid-coordinates
   (testing "We can get all points in a grid"
@@ -101,7 +103,9 @@
     (is (= [1 4 7] (hc/grid-segment medium-grid 3 [0 0] [1 0])))
     (is (= [9 5] (hc/grid-segment medium-grid 2 [2 2] [-1 -1]))))
   (testing "We can extract segments from grids and transform the result with a function"
-    (is (= 12 (hc/grid-segment medium-grid 3 [0 0] [1 0] (partial apply +))))))
+    (is (= 12 (hc/grid-segment medium-grid 3 [0 0] [1 0] (partial apply +)))))
+  (testing "Only use points in the grid, even if the defined segment exits it."
+    (is (= [1 2 3] (hc/grid-segment medium-grid 6 [0 0] [0 1])))))
 
 (deftest test-grid-simple-map
   (testing "We can map a function over a grid"

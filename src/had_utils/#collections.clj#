@@ -202,7 +202,7 @@ one dimensional vector"
   "In `grid` from `point` get `length` entries on either side (and point) starting at
   point + length - direction and going to point + length * (direction).
   Result returned as a vector. If `f` is supplied then call f on the vector. Only do coordinates
-  in the grid
+  in the grid.
   E.g. if the grid is [[1 2 3] [4 5 6] [7 8 9]] then (grid-centered-segment grid 1 [1 1] [1 0])
   returns [2 5 8]"
   ([grid length point direction] (grid-centered-segment grid length point direction identity))

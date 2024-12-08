@@ -43,3 +43,14 @@
   "Subtract two vectors of numbers of the same dimension"
   [v1 v2]
   (add-vectors v1 (invert-vector v2)))
+
+(defn ray
+  "Starting at and including `point` a collection of points
+  moving in steps given by `dir`."
+  [point dir]
+  (iterate (partial add-vectors dir) point))
+
+(defn ray-segment
+  "the first `n` points on the ray defined by `point` and `dir`"
+  [n point dir]
+  (take n (ray point dir)))
