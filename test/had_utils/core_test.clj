@@ -27,7 +27,12 @@
   (testing "Non trivial fixed point"
     (is (= [[] 5] (hcore/fixed-point-n (partial drop 1) (range 5)))))
   (testing "Fixed point detection stops if max iterations exceeded."
-    (is (= nil (hcore/fixed-point-n (partial drop 1) (range 5) 4)))))
+    (is (= nil (hcore/fixed-point-n (partial drop 1) (range 5) 4))))
+  (testing "Fixed point detection can use a test-fn to determine when to stop."
+    ;;; So the idea is that the iterating function produces larger and larger collections,
+    ;;; but we use a test-fn to chop off the first three, and those are the same after
+    ;;; three iterations.
+    (is (= [[0 0 0] 3] (hcore/fixed-point-n #(conj % 0) [] nil (partial take 3))))))
 
 (deftest test-flip-args
   (testing "We can flip the first two arguments of a function with two or more arguments."

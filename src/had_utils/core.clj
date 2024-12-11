@@ -29,18 +29,24 @@ index."
 
 (defn fixed-point-n
   "Iterate one argument function `f` on starting value `x`
-  unil a fixed point is reached, returning [`fixed-point` `n``]
+  unil a fixed point is reached, returning `[fixed-point n]`
   where `n` is the number of iterations needed to reach the fixed point.
   If `max-iterations` is provided then will return nil after applying
-  `f` that many times instead of running forever."
+  `f` that many times instead of running forever.
+  If `test-fn` is provided then compares `test-fn` applied to the iterates
+  to determine when to stop.
+  Note that if you want to use a `test-fn` you need to supply `max-iterations`,
+  though it can be `nil` to have unlimited."
   ([f x]
    (fixed-point-n f x nil))
   ([f x max-iterations]
+   (fixed-point-n f x max-iterations identity))
+  ([f x max-iterations test-fn]
    (loop [x x
           n 0
           max-iterations max-iterations]
      (let [fx (f x)]
-       (cond (= x fx) [x n]
+       (cond (= (test-fn x) (test-fn fx)) [x n]
              (= max-iterations 0) nil
              :otherwise (recur fx
                                (inc n)
