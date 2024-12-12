@@ -147,25 +147,6 @@ one dimensional vector"
   [grid loc & {:keys [:with-diagonal]}]
   (vals (neighbors-2d-map grid loc :with-diagonal with-diagonal)))
 
-(defn grid-to-graph
-  "Makes an ubergraph graph from the grid and edge-fn. If directed is true it is a directed graph.
-  For each location [row col] we call edge-fn with the grid, the location, and each neighbor of the
-  location (including diagonal neighbors if :with-diagonal is true). If edge-fn is true an edge is
-  created from location to neighbor. If it is a number then that is assigned as the weight of the edge.
-  Note that for undirected graphs edge-fn should be symmetrical in the location and neighbor location
-  or there may be unexpected behavior, as it will be called twice."
-  [grid edge-fn & {:keys [:with-diagonal :directed]}]
-  (let [graph (if directed (uc/digraph) (uc/graph))
-        update-fn (fn [g [location neighbor]]
-                    (let [result (edge-fn grid location neighbor)]
-                      (cond
-                        (number? result) (uc/add-edges g [location neighbor result])
-                        result (uc/add-edges g [location neighbor])
-                        :otherwise g)))]
-    (reduce update-fn graph (concat (for [row (range (count grid))
-                                          col (range (count (first grid)))
-                                          n (neighbors-2d grid [row col] :with-diagonal with-diagonal)]
-                                      [[row col] n])))))
 
 (defn pairs
   "Given `seq` (x0 x1 ... xn) returns a sequence of pairs
@@ -282,3 +263,30 @@ one dimensional vector"
    (partition (- col-end col-start))
    (map vec)
    vec))
+
+(defn grid-to-graph
+  "Makes an ubergraph graph from the grid and edge-fn. If directed is true it is a directed graph.
+  For each location [row col] we call edge-fn with the grid, the location, and each neighbor of the
+  location (including diagonal neighbors if :with-diagonal is true). If edge-fn is true an edge is
+  created from location to neighbor. If it is a number then that is assigned as the weight of the edge.
+  Note that for undirected graphs edge-fn should be symmetrical in the location and neighbor location
+  or there may be unexpected behavior, as it will be called twice. If :all-nodes is true than add nodes
+  even if they don't have any edges."
+  [grid edge-fn & {:keys [:with-diagonal :directed :all-nodes]}]
+  (let [graph (if directed (uc/digraph) (uc/graph))
+        update-fn (fn [g [location neighbor]]
+                    (let [result (edge-fn grid location neighbor)]
+                      (cond
+                        (number? result) (uc/add-edges g [location neighbor result])
+                        result (uc/add-edges g [location neighbor])
+                        :otherwise g)))
+        graph-with-edges (reduce
+                          update-fn
+                          graph
+                          (concat (for [row (range (count grid))
+                                        col (range (count (first grid)))
+                                        n (neighbors-2d grid [row col] :with-diagonal with-diagonal)]
+                                    [[row col] n])))]
+    (if all-nodes
+      (uc/add-nodes* graph-with-edges (grid-coordinates grid))
+      graph-with-edges)))
