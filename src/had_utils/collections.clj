@@ -1,7 +1,9 @@
 (ns had-utils.collections
   (:require
    [ubergraph.core :as uc]
-   [had-utils.math :as hm]))
+   [ubergraph.alg :as ua]
+   [had-utils.math :as hm]
+   [clojure.set :as s]))
 
 (defn map-kv
   "Construct a new map from an existing one.
@@ -298,3 +300,76 @@ one dimensional vector"
     (if all-nodes
       (uc/add-nodes* graph-with-edges (grid-coordinates grid))
       graph-with-edges)))
+
+;;; My AOC 2024 day-12 solution has some code related to making a
+;;; graph out of a grid, finding the connected components, and then
+;;; making a 'boundary graph' from each connected component, where
+;;; this is a graph that has nodes that are formed from the nodes of
+;;; the component as follows - for each node in the component, and for
+;;; each neighbor, if the neighbor is _not_ in the component then
+;;; create a 'boundary node', with coordinates between the node and
+;;; neighbor, 1/3 (not magic - but one wants this to be < 1/2 to make
+;;; sure certain cases are handled properly. And it can be smaller
+;;; without any problem.) of the distance to the neighbor. E.g. if [0
+;;; 0] is in the component but [0 1] is not then [0 1/3] is created as
+;;; a boundary node.  These nodes are then hooked up if they are
+;;; adjacent to each other, which is easily tested as both their l1
+;;; and linf distances being 1.  The number of connected components of
+;;; the boundary graph is equal to the number of sides of the region
+;;; defined by the connected component. The perimeter is just the number
+;;; of nodes.
+
+(defn gg-unconnected-neighbors
+  "For `grid-graph` a set of rectilinear neighbors of `node` in the grid
+  not connected to node by an edge."
+  [grid-graph node]
+  (s/difference (set (map (partial hm/add-vectors node) straight-2d-offsets))
+                (set (uc/neighbors grid-graph node))))
+
+(defn gg-node-boundary-points
+  "For `grid-graph` a set of 'boundary points' to `node`
+  - these are points displaced off of `node` a distance `d` in
+  the directions where `node` does not have a neighbor in the graph.
+  In order to get the right boundary we do _not_ restrict to
+  neighbors in the grid!"
+  ([grid-graph node] (gg-node-boundary-points grid-graph node 1/3))
+  ([grid-graph node d] (set (map (fn [nb] (hm/average-vectors nb node d))
+                                 (gg-unconnected-neighbors grid-graph node)))))
+
+(defn gg-component-boundary-points
+  "For `grid-graph` a set of 'boundary points' for the connected component
+  `component`."
+  [grid-graph component]
+  (reduce (fn [acc node]
+            (s/union acc (gg-node-boundary-points grid-graph node)))
+          #{}
+          (set component)))
+
+(defn gg-make-boundary-graph
+  "For `grid-graph` a 'boundary graph' for the connected component `component`
+  that has boundary nodes as constructed by `gg-component-boundary-points` and
+  edges between adjacent points on each side of the connected component's region
+  as viewed in the original grid."
+  [grid-graph component]
+  (let [boundary-points (gg-component-boundary-points grid-graph component)]
+    (reduce (fn [acc [p1 p2]]
+              (if
+                  (= 1 (hm/linf-distance p1 p2) (hm/l1-distance p1 p2))
+                (uc/add-edges acc [p1 p2])
+                acc))
+            (uc/add-nodes* (uc/graph) boundary-points)
+            (pairs boundary-points))))
+
+(defn bg-side-count
+  "For a grid boundary graph `boundary-graph` for a connected region in a grid-graph
+  the number of sides that regions has."
+  [boundary-graph]
+  (->> boundary-graph
+       ua/connected-components
+       count))
+
+(defn bg-perimeter
+  "For a grid boundary graph `boundary-graph` for a connected region in a grid-graph
+  the perimeter of that region"
+  [boundary-graph]
+  (uc/count-nodes boundary-graph))
