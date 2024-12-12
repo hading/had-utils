@@ -100,6 +100,14 @@ one dimensional vector"
   "Rectilinear and diagonal offsets in 2d"
   (vec (sort (concat straight-2d-offsets diagonal-2d-offsets))))
 
+(defn grid=
+  "true iff the value in the `grid` at `p1` equals that at `p2`.
+  If `f` is supplied then compare the value of `f` evaluated on the
+  values at the points instead of the values at the points themselves."
+  ([grid p1 p2] (grid= grid p1 p2 identity))
+  ([grid p1 p2 f] (= (f (get-in grid p1))
+                     (f (get-in grid p2)))))
+
 (defn in-grid?
   "Is the given row and column in the grid?"
   ([grid [row col]] (in-grid? grid row col))
