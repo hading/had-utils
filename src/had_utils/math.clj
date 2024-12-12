@@ -44,6 +44,20 @@
   [v1 v2]
   (add-vectors v1 (invert-vector v2)))
 
+(defn scale-vector
+  "Scale the vector `v` by a factor of `x`"
+  [v x]
+  (map (partial * x) v))
+
+(defn average-vectors
+  "Average vectors `v1` and `v2`. If `w` is supplied then
+  make a weighted average where `v1` has weight `w` and
+  `v2` weight `1-w`. One can also think of this as the midpoint
+  of two points."
+  ([v1 v2] (average-vectors v1 v2 1/2))
+  ([v1 v2 w] (add-vectors (scale-vector v1 w)
+                          (scale-vector v2 (- 1 w)))))
+
 (defn ray
   "Starting at and including `point` a collection of points
   moving in steps given by `dir`."

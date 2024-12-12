@@ -14,6 +14,15 @@
     (is (= [10 7] (hm/add-vectors v1 v1 v2)))
     (is (= v3 (hm/add-vectors v3)))))
 
+(deftest test-average-vectors
+  (testing "We can find the average of two vectors"
+    (is (= [2 3] (hm/average-vectors [1 2] [3 4]))))
+  (testing "We can find the weighted average of two vectors."
+    (is (= [1 2] (hm/average-vectors [1 2] [3 4] 1)))
+    (is (= [3 4] (hm/average-vectors [1 2] [3 4] 0)))
+    (is (= [2 3] (hm/average-vectors [1 2] [3 4] 1/2)))
+    (is (= [3 3] (hm/average-vectors [0 0] [9 9] 2/3)))))
+
 (deftest test-gcd
   (testing "GCD of numbers"
     (is (= 101 (hm/gcd 0 101)))
@@ -45,6 +54,13 @@
     (is (= 7 (hm/linf-distance v1 v2)))
     (is (= 7 (hm/linf-distance v3 v4)))
     (is (= 0 (hm/linf-distance v3 v3)))))
+
+(deftest test-scale-vector
+  (testing "We can scale vectors"
+    (is (= [0 0] (hm/scale-vector [1 2] 0)))
+    (is (= [1 2] (hm/scale-vector [1 2] 1)))
+    (is (= [2 4] (hm/scale-vector [1 2] 2)))
+    (is (= [-1 -2] (hm/scale-vector [1 2] -1)))))
 
 (deftest test-subtract-vectors
   (testing "We can subtract vectors"
