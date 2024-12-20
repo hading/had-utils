@@ -107,3 +107,7 @@ the first two arguments"
   ([input n update-fn hash-fn]
    (let [n (find-cyclic-equivalent input n update-fn hash-fn)]
      (first (drop n (iterate update-fn input))))))
+
+(defn sleep [msecs]
+  "Simple call to Java because this doesn't seem to be in Clojure."
+  (Thread/sleep msecs))

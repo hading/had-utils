@@ -32,7 +32,8 @@
   (str/split-lines (slurp path)))
 
 (defn line->ints
-  "Get integers from a string. Assumes the string begins and ends with a digit."
+  "Get integers from a string. Assumes the string begins and ends with a digit.
+  Note that this does _not_ handle negative numbers."
   [line]
   (->> (str/split line #"\D+")
        (mapv parse-long)))

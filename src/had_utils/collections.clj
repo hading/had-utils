@@ -131,6 +131,21 @@ one dimensional vector"
   [grid points]
   (filter (in-grid-pred grid) points))
 
+(defn grid-value
+  "Return the value of the `grid` at `point`"
+  [grid point]
+  (get-in grid point))
+
+(defn grid-has-value?
+  "Return whether the `grid` has value `val` at point `point`."
+  [grid val point]
+  (= val (grid-value grid point)))
+
+(defn not-grid-has-value?
+  "Return whether the `grid` does not have value `val` at point `point`"
+  [grid val point]
+  (not (grid-has-value? grid val point)))
+
 (defn neighbors-2d
   "`loc` is a [row col] coordinate in a 2d grid `grid`. Gives a vector of coordinates of horizontal
   and vertical neighbors, and also diagonal ones if `:with-diagonal` is true. Does not give neighbors
@@ -225,6 +240,15 @@ one dimensional vector"
          :when (f (get-in grid [row col]))]
      [row col] )))
 
+(defn find-in-grid
+  "Find all coordinates in `grid` where the value is `val`"
+  [grid val]
+  (filter-grid-coordinates (partial grid-has-value? grid val) grid))
+
+(defn find-first-in-grid
+  "Find the first coordinate in `grid` where the value is `val.`"
+  [grid val]
+  (first (find-in-grid grid val)))
 
 (defn grid-mapcat
   "Map `f`, a function of the grid and point in the grid and returning a collection,
