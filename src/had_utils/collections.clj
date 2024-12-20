@@ -237,7 +237,7 @@ one dimensional vector"
   ([f grid row-padding col-padding]
    (for [row (range row-padding (- (count grid) row-padding))
          col (range col-padding (- (count (first grid)) col-padding))
-         :when (f (get-in grid [row col]))]
+         :when (f (grid-value grid [row col]))]
      [row col] )))
 
 (defn find-in-grid
