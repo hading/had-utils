@@ -164,7 +164,9 @@
   (testing "We can get all pairs in a sequence"
     (is (empty? (hc/pairs [])))
     (is (empty? (hc/pairs [1])))
-    (is (= [[0 1] [0 2] [1 2]]) (hc/pairs (range 3)))))
+    (is (= [[0 1] [0 2] [1 2]]) (hc/pairs (range 3))))
+  (testing "We can supply a predicate to filter the pair sequence"
+    (is (= [[0 1] [1 2] [2 3]] (hc/pairs (range 4) (fn [x y] (= y (inc x))))))))
 
 (deftest test-subgrid
   (testing "We can get a subgrid of a grid"

@@ -175,15 +175,18 @@ one dimensional vector"
 
 (defn pairs
   "Given `seq` (x0 x1 ... xn) returns a sequence of pairs
-  ((x0 x1) (x0 x2) ... (x0 xn) (x1 x2) ...)"
-  [seq]
-  (loop [seq seq
-         pairs []]
-    (let [ys (rest seq)]
-      (if (empty? ys)
-        pairs
-        (recur ys
-               (concat pairs (map (partial list (first seq)) ys)))))))
+  ((x0 x1) (x0 x2) ... (x0 xn) (x1 x2) ...). If `pred`, a
+  function of two variables, is  provided then filter the pairs with that predicate."
+  ([seq]
+   (loop [seq seq
+          pairs []]
+     (let [ys (rest seq)]
+       (if (empty? ys)
+         pairs
+         (recur ys
+                (concat pairs (map (partial list (first seq)) ys)))))))
+  ([seq pred]
+   (filter (partial apply pred) (pairs seq))))
 
 (defn coordinate-segment
   "Get coordinates in the grid starting at `point` going in `direction`,
