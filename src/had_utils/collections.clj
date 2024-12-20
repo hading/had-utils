@@ -243,7 +243,7 @@ one dimensional vector"
 (defn find-in-grid
   "Find all coordinates in `grid` where the value is `val`"
   [grid val]
-  (filter-grid-coordinates (partial grid-has-value? grid val) grid))
+  (filter-grid-coordinates (partial = val) grid))
 
 (defn find-first-in-grid
   "Find the first coordinate in `grid` where the value is `val.`"
