@@ -68,3 +68,13 @@
   "the first `n` points on the ray defined by `point` and `dir`"
   [n point dir]
   (take n (ray point dir)))
+
+(defn put-into-range
+  "Find the number in range `lb` to `ub` (inclusive) to which `n` is equivalent mod `ub`-`lb`+1.
+   Assumes `lb` < `ub` and everything is an integer."
+  [lb ub n]
+  (let [modulus (inc (- ub lb))]
+    (+ lb (mod (- n lb) modulus))))
+
+(defn mod-op [lb ub op arg1 arg2]
+  (put-into-range lb ub (op arg1 arg2)))

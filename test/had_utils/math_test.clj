@@ -66,3 +66,17 @@
   (testing "We can subtract vectors"
     (is (= [0 0] (hm/subtract-vectors v1 v1)))
     (is (= [7 1] (hm/subtract-vectors v2 v1)))))
+
+(deftest put-into-range
+  (testing "We can find which number is a range is equivalent to a number mod the size of the range."
+    (is (= 1 (hm/put-into-range 0 9 1)))
+    (is (= 1 (hm/put-into-range 0 9 101)))
+    (is (= 1 (hm/put-into-range 0 9 -99)))
+    (is (= 20 (hm/put-into-range 12 27 100)))
+    (is (= 19 (hm/put-into-range 12 27 -541)))))
+
+(deftest test-mod-op
+  (testing "We can apply an operation to two numbers and move the result into a given range"
+    (is (= 1 (hm/mod-op 1 10 + 0 1)))
+    (is (= 1 (hm/mod-op 1 10 + 100 1)))
+    (is (= 3 (hm/mod-op 0 9 - 0 7)))))
