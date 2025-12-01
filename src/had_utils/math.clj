@@ -76,5 +76,7 @@
   (let [modulus (inc (- ub lb))]
     (+ lb (mod (- n lb) modulus))))
 
-(defn mod-op [lb ub op arg1 arg2]
+(defn mod-op
+  "Find `(op arg1 arg2)` and use `put-into-range` to make the result between `lb` and `ub` inclusive."
+  [lb ub op arg1 arg2]
   (put-into-range lb ub (op arg1 arg2)))
