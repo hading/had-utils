@@ -1,6 +1,7 @@
 (ns had-utils.core-test
   (:require [clojure.test :refer :all]
-            [had-utils.core :as hcore]))
+            [had-utils.core :as hcore]
+            [clojure.string :as str]))
 
 ;;;used for cycle testing
 ;;; starting with 5 repeats the value 4 at 3, 6, ... iterations
@@ -56,3 +57,18 @@
           f (fn [x y z] (* z (- x y)))]
       (is (= 3 ((hcore/reverse-args sub) 4 7)))
       (is (= -4 ((hcore/reverse-args f) 4 7 6))))))
+
+(deftest test-irange
+  (testing "Inclusive range"
+    (is (= (range 10) (hcore/irange 9)))
+    (is (= (range 1 20) (hcore/irange 1 19)))
+    (is (= (range 1 20 2) (hcore/irange 1 19 2)))
+    (is (= (range 1 20 3) (hcore/irange 1 19 3)))))
+
+(deftest test-split*
+  (testing "Convenience split* with arguments reversed"
+    (let [s "joe bob pete"
+          re #"\s"
+          limit 2]
+      (is (= (str/split s re) (hcore/split* re s)))
+      (is (= (str/split s re limit) (hcore/split* re s limit))))))

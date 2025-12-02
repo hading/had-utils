@@ -1,4 +1,6 @@
-(ns had-utils.core)
+(ns had-utils.core
+  (:require
+   [clojure.string :as str]))
 
 ;;;I don't remember why I made this function in the
 ;;;first place, and it's not obvious why it would be
@@ -111,3 +113,14 @@ the first two arguments"
 (defn sleep [msecs]
   "Simple call to Java because this doesn't seem to be in Clojure."
   (Thread/sleep msecs))
+
+(defn irange
+  "Equivalents for the standard range function where the `end` parameter is inclusive."
+  ([end] (range (inc end)))
+  ([start end] (range start (inc end)))
+  ([start end step] (range start (inc end) step)))
+
+(defn split*
+  "Equivalents for the standard str/split function with the first two arguments reversed."
+  ([re s] (str/split s re))
+  ([re s limit] (str/split s re limit)))
