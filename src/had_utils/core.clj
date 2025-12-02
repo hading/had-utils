@@ -1,6 +1,4 @@
-(ns had-utils.core
-  (:require
-   [clojure.string :as str]))
+(ns had-utils.core)
 
 ;;;I don't remember why I made this function in the
 ;;;first place, and it's not obvious why it would be
@@ -120,7 +118,3 @@ the first two arguments"
   ([start end] (range start (inc end)))
   ([start end step] (range start (inc end) step)))
 
-(defn split*
-  "Equivalents for the standard str/split function with the first two arguments reversed."
-  ([re s] (str/split s re))
-  ([re s limit] (str/split s re limit)))
