@@ -80,3 +80,17 @@
     (is (= 1 (hm/mod-op 1 10 + 0 1)))
     (is (= 1 (hm/mod-op 1 10 + 100 1)))
     (is (= 3 (hm/mod-op 0 9 - 0 7)))))
+
+(deftest test-digits->num
+  (testing "We can convert digits to a number."
+    (is (= 3 (hm/digits->num [3])))
+    (is (= 5132 (hm/digits->num [5 1 3 2])))
+    (is (= 10 (hm/digits->num [1 0 1 0] 2)))
+    (is (= 0 (hm/digits->num [])))))
+
+(deftest test-num->digits
+  (testing "We can convert a number to digits."
+    (is (= [3] (hm/num->digits 3)))
+    (is (= [5 1 3 2] (hm/num->digits 5132)))
+    (is (= [1 0 1 0] (hm/num->digits 10 2)))
+    (is (= [] (hm/num->digits 0)))))

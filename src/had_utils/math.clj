@@ -80,3 +80,19 @@
   "Find `(op arg1 arg2)` and use `put-into-range` to make the result between `lb` and `ub` inclusive."
   [lb ub op arg1 arg2]
   (put-into-range lb ub (op arg1 arg2)))
+
+(defn digits->num
+  "Convert the sequence of `digits` into a number. Can specify `base` (default 10)."
+  ([digits base] (reduce (fn [acc x] (+ x (* base acc))) 0 digits))
+  ([digits] (digits->num digits 10)))
+
+(defn num->digits
+  "convert a number `n` into a sequence of digits. Can specify `base` (default 10)."
+  ([n] (num->digits n 10))
+  ([num base]
+   (loop [n num
+          acc (list)]
+     (if (zero? n)
+       acc
+       (recur (quot n base)
+              (conj acc (mod n base)))))))
