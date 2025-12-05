@@ -96,3 +96,28 @@
        acc
        (recur (quot n base)
               (conj acc (mod n base)))))))
+
+(defn combine-ranges
+  "Take a finite sequence of ranges each of the form
+[xn yn] (inclusive, xn <= yn) and combine them to give a
+sequence of non-overlapping ranges containing the
+same numbers."
+  [ranges]
+  (let [sorted-ranges (sort-by first ranges)
+        merge-ranges (fn [[l1 h1] [l2 h2]]
+                       [l1 (max h1 h2)])]
+    (loop [active-range (first sorted-ranges)
+           new-range (second sorted-ranges)
+           ranges (drop 2 sorted-ranges)
+           acc []]
+      (cond
+        (nil? active-range) []
+        (nil? new-range) (conj acc active-range)
+        (> (first new-range) (second active-range)) (recur new-range (first ranges) (rest ranges) (conj acc active-range))
+        :otherwise (recur (merge-ranges active-range new-range) (first ranges) (rest ranges) acc)))))
+
+(defn range-count
+  "Take an integer range [x y]
+  and return the number of integers it contains."
+  [[x y]]
+  (inc (abs (- x y))))
