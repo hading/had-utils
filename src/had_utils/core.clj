@@ -118,7 +118,3 @@ the first two arguments"
   ([start end] (range start (inc end)))
   ([start end step] (range start (inc end) step)))
 
-(defn update*
-  "A version of update that allows the default `d` to be specified."
-  [m k d f & args]
-  (assoc m k (apply f (get m k d) args)))

@@ -187,3 +187,9 @@
       (is (= [[1 4] [2 5] [3 6]] transposed-grid))
       (is (vector? transposed-grid))
       (is (every? vector? transposed-grid)))))
+
+(deftest test-update*
+  (testing "Test update with specifiable default."
+    (let [m {:a 2}]
+      (is (= {:a 4} (hc/update* m :a 0 + 2)))
+      (is (= {:a 2 :b 2} (hc/update* m :b 0 + 2))))))
