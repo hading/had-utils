@@ -408,14 +408,15 @@ one dimensional vector"
 
 (defn map->graph
   "Construct an ubergraph from the given map `m`. An edge is drawn
-  from each key to each of its values. The values may be a sequence
-  or a single value. If `directed?` is specified then a digraph is
+  from each key to each of its values. The values must be a collection
+  of the desired targets.
+  If `directed?` is specified then a digraph is
   returned, otherwise a standard graph."
   ([m directed?]
    (reduce-kv (fn [g k vs]
                 (reduce (fn [g v] (uc/add-directed-edges g [k v]))
                         g
-                        (seq? vs vs [vs])))
+                        vs))
               (if directed? (uc/digraph) (uc/graph))
               m))
   ([m] (map->graph m nil)))
