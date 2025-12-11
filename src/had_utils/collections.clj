@@ -405,3 +405,31 @@ one dimensional vector"
   "A version of update that allows the default `d` to be specified."
   [m k d f & args]
   (assoc m k (apply f (get m k d) args)))
+
+(defn map->graph
+  "Construct an ubergraph from the given map `m`. An edge is drawn
+  from each key to each of its values. The values may be a sequence
+  or a single value. If `directed?` is specified then a digraph is
+  returned, otherwise a standard graph."
+  ([m directed?]
+   (reduce-kv (fn [g k vs]
+                (reduce (fn [g v] (uc/add-directed-edges g [k v]))
+                        g
+                        (seq? vs vs [vs])))
+              (if directed? (uc/digraph) (uc/graph))
+              m))
+  ([m] (map->graph m nil)))
+
+
+(defn count-paths
+  "For the directed acyclic ubergraph `graph` finds the number of paths
+  from `from` to `to`."
+  [graph from to]
+  (let [nodes (ua/topsort graph from)]
+    (-> (reduce (fn [vals node]
+                  (reduce (fn [acc n] (update* acc n 0 + (get acc node)))
+                          vals
+                          (uc/successors graph node)))
+                {(first nodes) 1}
+                nodes)
+        (get to 0))))
