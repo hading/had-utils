@@ -1,6 +1,7 @@
 (ns had-utils.core-test
   (:require [clojure.test :refer :all]
-            [had-utils.core :as hcore]))
+            [had-utils.core :as hcore]
+            [clojure.string :as str]))
 
 ;;;used for cycle testing
 ;;; starting with 5 repeats the value 4 at 3, 6, ... iterations
@@ -64,3 +65,8 @@
     (is (= (range 1 20 2) (hcore/irange 1 19 2)))
     (is (= (range 1 20 3) (hcore/irange 1 19 3)))))
 
+(deftest test-partial-last
+  (testing "We can specify the last arguments of a function"
+    (let [f (fn [a b c d] [a b c d])]
+      (is (= [1 2 3 4] ((hcore/partial-last f 3 4) 1 2)))
+      (is (= ["joe" "bob"] ((hcore/partial-last str/split #" ") "joe bob"))))))

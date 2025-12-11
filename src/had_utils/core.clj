@@ -118,3 +118,11 @@ the first two arguments"
   ([start end] (range start (inc end)))
   ([start end step] (range start (inc end) step)))
 
+(defn partial-last
+  "Like partial, but you specify the last arguments.
+  E.g. if f is a function of four arguments and
+  g is (partial-last f a b) then (g c d) is
+  (f c d a b)."
+  [f & args]
+  (reverse-args
+   (apply partial (reverse-args f) (reverse args))))
