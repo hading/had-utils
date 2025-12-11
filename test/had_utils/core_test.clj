@@ -64,3 +64,8 @@
     (is (= (range 1 20 2) (hcore/irange 1 19 2)))
     (is (= (range 1 20 3) (hcore/irange 1 19 3)))))
 
+(deftest test-update*
+  (testing "Test update with specifiable default."
+    (let [m {:a 2}]
+      (is (= {:a 4} (hcore/update* m :a 0 + 2)))
+      (is (= {:a 2 :b 2} (hcore/update* m :b 0 + 2))))))
